@@ -1,0 +1,2 @@
+# hide debugger presence by modifying the PEB structure (BeingDebugged field)
+dbh
