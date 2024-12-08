@@ -1,0 +1,56 @@
+*** Generate coredump
+
+The process must be running.
+
+gcore [file]
+
+To load the core when debugging:
+gdb <binary> <coredump>
+
+*** Dump memory to file
+dump binary memory result.bin <start_address> <end_address>
+
+*** Load memory from file into process
+restore filename [binary] bias start end
+
+bias      - the address where the program will load the memory to
+start/end - file offsets
+
+*** Show memory
+
+- hex
+x/{number of bytes}b <addr>
+	x/5b 0x1000
+
+- string
+# to print full string (default is truncation)
+set print elements 0
+
+x/s <addr>
+
+- diassembly
+x/{number of instructions}i <addr>
+	x/5s 0x1000
+
+*** Show assembly in a panel
+layout asm
+
+*** Print a pointer as a dynamic array with a length
+p *variable@length
+
+*** Show disassembly in different flavors
+- As intel
+set disassembly-flavor intel
+
+- As ATT
+set disassembly-flavor att
+
+*** Dynamically add new data types to binaries
+Define all the data structure in a source file and compile it with
+
+cc -c -g3 -ggdb src.c
+
+This will make a src.o that we can load with this command in gdb:
+add-symbol-file src.o 0
+
+Then all the types defined in the source file is available for use

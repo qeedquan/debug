@@ -1,0 +1,21 @@
+*** Attaching GDB to wine
+
+# launch the program
+wine program.exe
+
+# find the process wine is running as
+ps auxww | grep -i wine
+
+# attach to it
+gdb
+> attach pid
+
+
+*** Using GDB directly to call wine
+WINELOADERNOEXEC=1 gdb wine
+> r program.exe
+
+*** Winedbg commands (Not running GDB)
+
+info target - list all the memory mappings
+
