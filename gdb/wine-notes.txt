@@ -1,0 +1,48 @@
+*** Attaching GDB to wine
+
+# launch the program
+wine program.exe
+
+# find the process wine is running as
+ps auxww | grep -i wine
+
+# attach to it
+gdb
+> attach pid
+
+*** Using GDB directly to call wine (only works with the wine binary, not the script wrapper wine)
+WINELOADERNOEXEC=1 gdb wine64
+> r program.exe
+
+*** Run winedbg on the binary
+
+# This is more useful because the backtrace preserves the memory mapping from the binary, with GDB we lose that info
+# This also allows us to set breakpoints in the binary without having to relocate the address
+wine winedbg foo.exe
+
+# use gdb instead of winedbg as a ui
+wine winedbg --gdb foo.exe
+
+set $BreakOnFirstChance=0
+cont
+b CreateFileW
+b *0x1400000000
+bt
+
+*** Winedbg commands (Not running GDB)
+
+info target - list all the memory mappings sections made by the program
+              NOTE: this is not the same as the memory maps, it only shows which sections of external sections is mapped into the binary
+                    it doesn't show things like heap memory, use /proc/<pid>/maps for that
+
+info proc   - list argc/argv of program
+info types  - list all types registered in the debugging session
+
+*** WINEDEBUG channels
+
+# trace all file i/o apis (CreateFile/ReadFile/etc)
+WINEDEBUG=+file,+module wine foo.exe
+
+# trace c++ iostream ops
+WINEDEBUG=+msvcp
+

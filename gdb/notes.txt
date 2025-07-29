@@ -1,0 +1,11 @@
+*** Dump default linker script
+ld --verbose
+
+*** Dump memory contents of a binary (generate a core file)
+gcore -a -o dump.bin <pid>
+
+The core file contents are mapped to section addresses that can be obtained using the following command:
+readelf -Wl dump.bin
+
+*** Get pid of program
+print (int)getpid()
