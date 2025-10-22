@@ -1,0 +1,97 @@
+*** Generate coredump
+
+The process must be running.
+
+gcore [file]
+
+To load the core when debugging:
+gdb <binary> <coredump>
+
+*** Dump memory to file
+dump binary memory result.bin <start_address> <end_address>
+
+*** Load memory from file into process
+restore filename [binary] bias start end
+
+bias      - the address where the program will load the memory to
+start/end - file offsets
+
+*** Show memory
+
+- hex
+x/{number of bytes}b <addr>
+	x/5b 0x1000
+
+- string
+# to print full string (default is truncation)
+set print elements 0
+
+x/s <addr>
+
+- diassembly
+x/{number of instructions}i <addr>
+	x/5s 0x1000
+
+*** Show assembly in a panel
+layout asm
+
+*** Print a pointer as a dynamic array with a length
+p *variable@length
+
+*** Show disassembly in different flavors
+- As intel
+set disassembly-flavor intel
+
+- As ATT
+set disassembly-flavor att
+
+*** Dynamically add new data types to binaries
+Define all the data structure in a source file and compile it with
+
+cc -c -g3 -ggdb src.c
+
+This will make a src.o that we can load with this command in gdb:
+add-symbol-file src.o 0
+
+Then all the types defined in the source file is available for use
+
+*** Relocate symbol offsets
+For binaries that have debugging information defined at an offset not the same as where the binary get loaded,
+we can relocate the offset so gdb can map the addresses to the right symbol using the following:
+
+# by default, gdb will load the symbol table from the binary on startup
+# since we want to relocate it, we need to remove the old symbol file info
+# do it with this command
+symbol-file
+
+# load symbol table from file and relocate it to offset
+add-symbol-file <file> <offset>
+
+*** Breakpoints
+
+# Set breakpoints on all functions
+rbreak .*
+
+# Set breakpoint on functions matching regex
+rbreak regex
+rbreak ^func_name
+
+# Delete breakpoint at a specific address
+clear *0xdeadbeef
+
+*** Watchpoints
+rwatch does not work well, it misses some reads
+awatch works better
+
+# Disable hardware watchpoint (use software watchpoints)
+# This is not always possible since some watch functions requires hardware breakpoints
+set can-use-hw-watchpoints 0
+
+*** Info
+
+info sharedlibrary - List loaded shared libraries.
+info signals - List all signals and how they are currently handled.
+info threads - List all threads.
+info args - Print the arguments to the function of the current stack frame.
+info locals - Print the local variables in the currently selected stack frame.
+

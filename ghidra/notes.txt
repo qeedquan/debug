@@ -1,0 +1,9 @@
+*** References
+https://www.blackhat.com/presentations/bh-dc-07/Sabanal_Yason/Paper/bh-dc-07-Sabanal_Yason-WP.pdf
+
+*** Adding custom shared libs path
+Use LD_LIBRARY_PATH in command line and start ghidra.
+
+*** Errors on startup with loading dbghelper.dll in ghidra debugger windows
+Copy the dlls to the jdk bin/ folder
+
