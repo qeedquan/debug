@@ -1,0 +1,24 @@
+*** Tracing memory
+
+valgrind --tool=lackey --trace-superblocks=yes --trace-mem=yes <binary>
+
+It prints memory data access traces that look like this:
+
+  I  0023C790,2  # instruction read at 0x0023C790 of size 2
+  I  0023C792,5
+   S BE80199C,4  # data store at 0xBE80199C of size 4
+  I  0025242B,3
+   L BE801950,4  # data load at 0xBE801950 of size 4
+  I  0023D476,7
+   M 0025747C,1  # data modify at 0x0025747C of size 1
+  I  0023DC20,2
+   L 00254962,1
+   L BE801FB3,1
+  I  00252305,1
+   L 00254AEB,1
+   S 00257998,1
+
+*** Memory leaks
+
+valgrind --tool=memcheck <binary>
+

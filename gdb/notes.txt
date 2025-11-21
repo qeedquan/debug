@@ -1,0 +1,23 @@
+*** Dump default linker script
+ld --verbose
+
+*** Dump memory contents of a binary (generate a core file)
+gcore -a -o dump.bin <pid>
+
+The core file contents are mapped to section addresses that can be obtained using the following command:
+readelf -Wl dump.bin
+
+*** Get pid of program
+print (int)getpid()
+
+*** Watch function return values until it equals something
+# This requires the program to be running before it is usable, so set a breakpoint in main
+# and run to it first
+
+# On x86-64, $rax stores the return value of function calls
+# This watch will return a number we will use cond on
+watch $rax
+
+cond <breakpoint_number_returned_by_watch> $rax == <value_here>
+
+c
